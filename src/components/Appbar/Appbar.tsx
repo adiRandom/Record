@@ -1,12 +1,13 @@
 import React, { useState } from "react"
-import { View, Text, Image, StyleSheet, TouchableNativeFeedback, } from "react-native"
+import { View, Text, Image, StyleSheet, TouchableNativeFeedback, TouchableOpacity, } from "react-native"
 import { Colors } from "../../assets/style/Theme"
 
 
 type AppbarProps = {
     title: string,
     canGoBack?: boolean,
-    goBack?: () => void
+    goBack?: () => void,
+    toggleDropdown?: () => void
 }
 
 
@@ -16,7 +17,8 @@ const style = StyleSheet.create({
         height: 64,
         flexDirection: "row",
         alignItems: 'center',
-        justifyContent: 'flex-start'
+        justifyContent: 'flex-start',
+        zIndex: 1
     },
     iconWrapper: {
         height: 32,
@@ -37,11 +39,13 @@ const style = StyleSheet.create({
         right: 48,
         top: 64,
         elevation: 4,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        height: 48
     },
     menuItem: {
-        height: 64,
-        padding: 16
+        height: 48,
+        padding: 16,
+        justifyContent: "center"
     },
     menuItemLabel: {
         fontSize: 18,
@@ -60,9 +64,7 @@ const style = StyleSheet.create({
 })
 
 
-const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
-
-    const [showMenu, setShowMenu] = useState(false)
+const Appbar = ({ title, canGoBack, goBack, toggleDropdown }: AppbarProps) => {
 
     return (
         <View style={style.main}>
@@ -91,26 +93,38 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
                 <View style={{ ...style.iconWrapper }}>
                     {/* Button wrapper */}
                     <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple("#fff", true)}
-                        onPress={() => setShowMenu(!showMenu)}>
+                        onPress={() => {
+                            if (toggleDropdown)
+                                toggleDropdown();
+                        }}>
                         <View>
                             <Image style={style.icon} source={require("../../assets/icons/light/3dots.png")}></Image>
                         </View>
                     </TouchableNativeFeedback>
                 </View>
             </View>
-            {showMenu && <View style={style.menuList}>
-                {/* TODO: Fix not clickable */}
-                <TouchableNativeFeedback onPress={() => console.log("hye")}>
-                    {/* TODO: Change text based on teme */}
-                    <View>
-                        <Text style={style.menuItemLabel}>
-                            Change to dark theme
-                        </Text>
-                    </View>
-                </TouchableNativeFeedback>
-            </View>}
         </View >
     )
+}
+
+
+type ThemeDropdownProps = {
+    isVisible: boolean,
+}
+export const ThemeDropdown = ({ isVisible }: ThemeDropdownProps) => {
+    if (isVisible)
+        // TODO: Style
+        return (<View style={style.menuList}>
+            <TouchableOpacity>
+                {/* TODO: Change text based on teme */}
+                <View>
+                    <Text style={style.menuItemLabel}>
+                        Change to dark theme
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        </View>)
+    return null;
 }
 
 export default Appbar;

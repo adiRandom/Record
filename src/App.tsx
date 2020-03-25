@@ -1,12 +1,14 @@
 import { NativeRouter, Route, BackButton, Switch } from "react-router-native"
-import React from 'react'
+import React, { useState } from 'react'
 import Home from "./routes/Home/Home";
-import Appbar from "./components/Appbar/Appbar";
+import Appbar, { ThemeDropdown } from "./components/Appbar/Appbar";
 import { View } from "react-native";
 // TODO: Add components
 const App = () => {
+
 	return (
 		<View>
+			
 			<NativeRouter>
 				<Switch>
 					<Route exact strict path="/" component={Home}></Route>
