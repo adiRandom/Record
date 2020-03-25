@@ -1,0 +1,116 @@
+import React, { useState } from "react"
+import { View, Text, Image, StyleSheet, TouchableNativeFeedback, } from "react-native"
+import { Colors } from "../../assets/style/Theme"
+
+
+type AppbarProps = {
+    title: string,
+    canGoBack?: boolean,
+    goBack?: () => void
+}
+
+
+const style = StyleSheet.create({
+    main: {
+        backgroundColor: Colors.primary,
+        height: 64,
+        flexDirection: "row",
+        alignItems: 'center',
+        justifyContent: 'flex-start'
+    },
+    iconWrapper: {
+        height: 32,
+        width: 32,
+        marginHorizontal: 16,
+        alignItems: "center",
+    },
+    icon: {
+        height: 32,
+        width: 32,
+    },
+    menu: {
+        position: 'absolute',
+        right: 16
+    },
+    menuList: {
+        position: 'absolute',
+        right: 48,
+        top: 64,
+        elevation: 4,
+        backgroundColor: 'white'
+    },
+    menuItem: {
+        height: 64,
+        padding: 16
+    },
+    menuItemLabel: {
+        fontSize: 18,
+        fontFamily: 'Roboto',
+        fontWeight: '300',
+        fontStyle: 'normal'
+    },
+    title: {
+        color: "white",
+        fontWeight: "500",
+        fontFamily: "Roboto",
+        fontSize: 32,
+        lineHeight: 37,
+        fontStyle: "normal"
+    }
+})
+
+
+const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
+
+    const [showMenu, setShowMenu] = useState(false)
+
+    return (
+        <View style={style.main}>
+            {/* Back button wrapper */}
+            {canGoBack && <View style={style.iconWrapper}>
+                {/* TODO:Fix ripple round */}
+                <TouchableNativeFeedback onPress={() => {
+                    if (goBack)
+                        goBack();
+                    // TODO: Add roipple color to a variable if needed to be adjusted with theme
+                }} background={TouchableNativeFeedback.Ripple("#fff", true)} style={{ borderRadius: 100 }}>
+                    <View>
+                        <Image style={style.icon} source={require("../../assets/icons/light/back.png")}></Image>
+                    </View>
+                </TouchableNativeFeedback>
+            </View>}
+            {/* Title wrapper */}
+            {/* Correct position if no back button */}
+            <View style={{ marginLeft: !canGoBack ? 64 : 0 }}>
+                <Text style={style.title}>
+                    {title}
+                </Text>
+            </View>
+            {/* Options menu */}
+            <View style={style.menu}>
+                <View style={{ ...style.iconWrapper }}>
+                    {/* Button wrapper */}
+                    <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple("#fff", true)}
+                        onPress={() => setShowMenu(!showMenu)}>
+                        <View>
+                            <Image style={style.icon} source={require("../../assets/icons/light/3dots.png")}></Image>
+                        </View>
+                    </TouchableNativeFeedback>
+                </View>
+            </View>
+            {showMenu && <View style={style.menuList}>
+                {/* TODO: Fix not clickable */}
+                <TouchableNativeFeedback onPress={() => console.log("hye")}>
+                    {/* TODO: Change text based on teme */}
+                    <View>
+                        <Text style={style.menuItemLabel}>
+                            Change to dark theme
+                        </Text>
+                    </View>
+                </TouchableNativeFeedback>
+            </View>}
+        </View >
+    )
+}
+
+export default Appbar;
