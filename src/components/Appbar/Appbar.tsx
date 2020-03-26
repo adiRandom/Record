@@ -72,7 +72,7 @@ type ThemeDropdownProps = {
 
 export const ThemeDropdown = ({ isVisible }: ThemeDropdownProps) => {
     if (isVisible)
-        // TODO: Style
+        // TODO: Add dismiss toucable fullscreen
         return (<View style={style.menuList}>
             <TouchableNativeFeedback>
                 {/* TODO: Change text based on teme */}
@@ -116,7 +116,7 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
                 </View>
                 {/* Options menu */}
                 <View style={style.menu}>
-                    <View style={{ ...style.iconWrapper,marginRight:0 }}>
+                    <View style={{ ...style.iconWrapper, marginRight: 0 }}>
                         {/* Button wrapper */}
                         <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple("#fff", true)}
                             onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
