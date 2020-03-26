@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Dimensions, Image, TextInput, TouchableNativeFeedback, StyleSheet, KeyboardAvoidingView } from 'react-native'
+import { View, Dimensions, Image, TextInput, TouchableNativeFeedback, StyleSheet, KeyboardAvoidingView,Text } from 'react-native'
 import Appbar from '../../components/Appbar/Appbar'
 import { NavigationProps } from '../NavigationProps'
 import GestureRecognizer from 'react-native-swipe-gestures'
@@ -54,6 +54,16 @@ const style = StyleSheet.create({
         fontWeight: "300",
         fontSize: 14,
         margin: 0
+    },
+    hintWrapper:{
+        alignSelf:'center',
+        marginTop:4
+    },
+    hint:{
+        fontSize:12, 
+        // TODO: Test font   
+        fontFamily:"Roboto-Thin",
+        fontStyle:'normal',
     }
 })
 
@@ -94,6 +104,9 @@ const CreateActivity = ({ goBack }: NavigationProps) => {
                 <GestureRecognizer onSwipeLeft={nextIcon} onSwipeRight={lastIcon}>
                     <Image style={style.icon} source={icons[currentIconIndex]}></Image>
                 </GestureRecognizer>
+            </View>
+            <View style={style.hintWrapper}>
+                <Text style={style.hint}>Swipe to cycle through the icons</Text>
             </View>
             <View style={style.textInputWrapper}>
                 <TextInput style={style.textInput} placeholder={"Give this activity a name"} value={name} onChangeText={setName}></TextInput>

@@ -59,6 +59,7 @@ const style = StyleSheet.create({
     title: {
         color: "white",
         fontWeight: "500",
+        // TODO: Fix fonts
         fontFamily: "Roboto",
         fontSize: 32,
         lineHeight: 37,
