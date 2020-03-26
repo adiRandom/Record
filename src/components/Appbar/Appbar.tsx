@@ -34,12 +34,12 @@ const style = StyleSheet.create({
     },
     menu: {
         position: 'absolute',
-        right: 16
+        right: 8
     },
     menuList: {
         position: 'absolute',
-        right: 48,
-        top: 64,
+        right: 8,
+        top: 8,
         elevation: 4,
         backgroundColor: 'white',
         height: 48,
@@ -116,7 +116,7 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
                 </View>
                 {/* Options menu */}
                 <View style={style.menu}>
-                    <View style={{ ...style.iconWrapper }}>
+                    <View style={{ ...style.iconWrapper,marginRight:0 }}>
                         {/* Button wrapper */}
                         <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple("#fff", true)}
                             onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
