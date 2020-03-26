@@ -12,7 +12,7 @@ type AppbarProps = {
 
 const style = StyleSheet.create({
     main: {
-        height: 128,
+        height: 64,
         zIndex: 10
     },
     appbar: {

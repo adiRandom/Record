@@ -5,4 +5,5 @@ export const Colors = {
     accent:"#D6CE54",
     backgroundLight:"#ffffff",
     backgroundDark:"#2E454D",
+    textInputBorder:"#A5A5A5"
 }

@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-native'
-import { View, TouchableNativeFeedback, Image, Text, StyleSheet } from 'react-native'
+import { View, TouchableNativeFeedback, Image, Text, StyleSheet, Dimensions, TouchableWithoutFeedback } from 'react-native'
 import { Colors } from '../../assets/style/Theme'
 import Routes from "../../routes/Routes"
+
+const { height, width } = Dimensions.get('screen')
 
 const style = StyleSheet.create({
     main: {
@@ -30,11 +32,17 @@ const style = StyleSheet.create({
         fontFamily: 'Roboto',
         fontWeight: '300'
     },
+    hiddenContainer: {
+        marginRight: 8,
+        flexDirection: 'column-reverse',
+        alignItems: 'flex-end',
+        height,
+        width,
+    },
     hidden: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 24,
-        marginRight: 8
     },
     hiddenLabelWrapper: {
         marginRight: 16
@@ -67,34 +75,39 @@ const CreateButton = () => {
                     <Image style={style.toggleButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
                 </View>
             </TouchableNativeFeedback>
-            <View style={{
-                ...style.hidden,
-                display: showHidden ? "flex" : "none"
-            }}>
-                <View style={style.hiddenLabelWrapper}>
-                    <Text style={style.hiddenLabel}>Register a record</Text>
-                </View>
-                <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_RECORD)}
-                    background={TouchableNativeFeedback.Ripple("#fff", true)}>
-                    <View style={style.hiddenButton}>
-                        <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/stopwatch.png")}></Image>
+            {showHidden &&
+                <TouchableWithoutFeedback onPress={() => setShowHidden(false)}>
+                    <View style={style.hiddenContainer}>
+                        <View style={{
+                            ...style.hidden,
+                            display: showHidden ? "flex" : "none"
+                        }}>
+                            <View style={style.hiddenLabelWrapper}>
+                                <Text style={style.hiddenLabel}>Register a record</Text>
+                            </View>
+                            <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_RECORD)}
+                                background={TouchableNativeFeedback.Ripple("#fff", true)}>
+                                <View style={style.hiddenButton}>
+                                    <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/stopwatch.png")}></Image>
+                                </View>
+                            </TouchableNativeFeedback>
+                        </View>
+                        <View style={{
+                            ...style.hidden,
+                            display: showHidden ? "flex" : "none"
+                        }}>
+                            <View style={style.hiddenLabelWrapper}>
+                                <Text style={style.hiddenLabel}>New activity</Text>
+                            </View>
+                            <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_ACTIVITY)}
+                                background={TouchableNativeFeedback.Ripple("#fff", true)}>
+                                <View style={style.hiddenButton}>
+                                    <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
+                                </View>
+                            </TouchableNativeFeedback>
+                        </View>
                     </View>
-                </TouchableNativeFeedback>
-            </View>
-            <View style={{
-                ...style.hidden,
-                display: showHidden ? "flex" : "none"
-            }}>
-                <View style={style.hiddenLabelWrapper}>
-                    <Text style={style.hiddenLabel}>New activity</Text>
-                </View>
-                <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_ACTIVITY)}
-                    background={TouchableNativeFeedback.Ripple("#fff", true)}>
-                    <View style={style.hiddenButton}>
-                        <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
-                    </View>
-                </TouchableNativeFeedback>
-            </View>
+                </TouchableWithoutFeedback>}
         </View>
 }
 
