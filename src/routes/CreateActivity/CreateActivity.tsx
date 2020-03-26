@@ -44,17 +44,15 @@ const style = StyleSheet.create({
     },
     textInputWrapper: {
         borderBottomColor: Colors.textInputBorder,
-        borderBottomWidth: 1,
         width: 288,
+        borderBottomWidth:1,
         alignSelf: 'center',
         marginTop: 96,
         height: 48,
-        flex: 1
     },
     textInput: {
         fontWeight: "300",
         fontSize: 14,
-        height: 48,
         margin: 0
     }
 })
