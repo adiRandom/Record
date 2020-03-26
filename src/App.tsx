@@ -1,9 +1,10 @@
-import { NativeRouter, Route, BackButton, Switch } from "react-router-native"
-import React, { useState } from 'react'
+import { NativeRouter, Route, Switch } from "react-router-native"
+import React from 'react'
 import Home from "./routes/Home/Home";
-import Appbar, { ThemeDropdown } from "./components/Appbar/Appbar";
-import { View } from "react-native";
+import { View} from "react-native";
 // TODO: Add components
+
+
 const App = () => {
 
 	return (
@@ -21,6 +22,8 @@ const App = () => {
 			</NativeRouter>
 		</View>
 	)
+
+
 }
 
 export default App;
