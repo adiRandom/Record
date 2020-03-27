@@ -15,3 +15,10 @@
 
 - Create button
 - Create Activity route
+
+## v0.0.3
+
+**Added**
+
+- `Activity` and `ActivityIcon` models
+- Service to save a new Activity
