@@ -22,3 +22,4 @@
 
 - `Activity` and `ActivityIcon` models
 - Service to save a new Activity
+- Card component

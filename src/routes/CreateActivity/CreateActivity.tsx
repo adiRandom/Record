@@ -9,7 +9,7 @@ import { Colors } from '../../assets/style/Theme'
 import ActivityIcon from '../../models/ActivityIcon'
 import Activity from '../../models/Activity'
 import getNewActivityId from '../../utils/GetNewActivityId'
-import addActivity from '../../services/AddActivity'
+import {addActivity} from '../../services/Activity'
 import { Redirect } from 'react-router-native'
 import Routes from '../Routes'
 
@@ -67,7 +67,6 @@ const style = StyleSheet.create({
     },
     hint: {
         fontSize: 12,
-        // TODO: Test font   
         fontFamily: "Roboto-Thin",
         fontStyle: 'normal',
     }
