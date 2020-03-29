@@ -4,7 +4,7 @@ import { Colors } from "../../assets/style/Theme"
 
 
 type AppbarProps = {
-    title: string,
+    title: string|undefined,
     canGoBack?: boolean,
     goBack?: () => void,
 }

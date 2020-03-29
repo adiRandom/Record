@@ -5,6 +5,8 @@ import { convertTimestamp } from '../../utils/ConvertTimestamp'
 import { Colors } from '../../assets/style/Theme'
 import getActivityIcon from '../../utils/GetActivityIcon'
 import ActivityIcon from '../../models/ActivityIcon'
+import Routes from '../../routes/Routes'
+import { Redirect } from 'react-router-native'
 
 type CardProps = {
     activity: Activity,
@@ -49,16 +51,24 @@ const style = StyleSheet.create({
 const Card = ({ activity }: CardProps) => {
 
     const [icon, setIcon] = useState(null as ActivityIcon | null)
+    const [redirect, setRedirect] = useState("")
 
     // Get icon
     useEffect(() => {
         setIcon(getActivityIcon(activity.icon.name))
     }, [])
 
+    function goToActivity() {
+        setRedirect(Routes.ACTIVITY(activity.id))
+    }
+
+    if (redirect !== "")
+        return <Redirect to={redirect} />
+
     return (
 
         <View style={style.main}>
-            <TouchableNativeFeedback onPress={() => console.log("hey")} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, false)}>
+            <TouchableNativeFeedback onPress={goToActivity} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, false)}>
                 <View style={{
                     height: 160,
                     width: 160,

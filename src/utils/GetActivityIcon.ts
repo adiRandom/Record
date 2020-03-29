@@ -1,6 +1,6 @@
 import ActivityIcon from "../models/ActivityIcon"
 
-export default function getActivityIcon(icon: string): ActivityIcon {
+export default function getActivityIcon(icon: string|undefined): ActivityIcon {
     let file;
     switch (icon) {
         case 'arm-icon': file = require("../assets/icons/activity/arm-icon.png");break;
@@ -19,6 +19,6 @@ export default function getActivityIcon(icon: string): ActivityIcon {
     }
     return {
         file,
-        name: icon
+        name: ""
     }
 }

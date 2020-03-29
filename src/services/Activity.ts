@@ -1,5 +1,5 @@
 import Activity from "../models/Activity";
-import AsyncStorage  from "@react-native-community/async-storage";
+import AsyncStorage from "@react-native-community/async-storage";
 import { LAST_ID_KEY } from "../utils/GetNewActivityId";
 
 
@@ -20,4 +20,9 @@ export async function getAllActivities() {
         }
         return (await AsyncStorage.multiGet(activityKeys)).map(item => JSON.parse(item[1]!!)) as Activity[];
     }
+}
+
+export async function getActivity(id: string) {
+    const res = await AsyncStorage.getItem(`activity-${id}`)
+    return JSON.parse(res!!) as Activity
 }
