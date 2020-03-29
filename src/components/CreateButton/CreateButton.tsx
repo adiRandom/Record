@@ -69,13 +69,16 @@ const CreateButton = () => {
         return (<Redirect to={redirect} />)
     else
         return <View style={style.main}>
-            <TouchableNativeFeedback onPress={() => setShowHidden(!showHidden)}
-                background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
-                <View style={style.toggleButton}>
-                    <Image style={style.toggleButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
-                </View>
-            </TouchableNativeFeedback>
+            <View style={style.toggleButton}>
+                <TouchableNativeFeedback onPress={() => setShowHidden(!showHidden)}
+                    background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
+                    <View style={{width:64,alignItems:'center'}}>
+                        <Image style={style.toggleButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
+                    </View>
+                </TouchableNativeFeedback>
+            </View>
             {showHidden &&
+                // TODO: Fix dismiss area
                 <TouchableWithoutFeedback onPress={() => setShowHidden(false)}>
                     <View style={style.hiddenContainer}>
                         <View style={{
@@ -85,12 +88,14 @@ const CreateButton = () => {
                             <View style={style.hiddenLabelWrapper}>
                                 <Text style={style.hiddenLabel}>Register a record</Text>
                             </View>
-                            <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_RECORD)}
-                                background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
-                                <View style={style.hiddenButton}>
-                                    <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/stopwatch.png")}></Image>
-                                </View>
-                            </TouchableNativeFeedback>
+                            <View style={style.hiddenButton}>
+                                <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_RECORD)}
+                                    background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
+                                    <View style={{width:64,alignItems:'center'}}>
+                                        <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/stopwatch.png")}></Image>
+                                    </View>
+                                </TouchableNativeFeedback>
+                            </View>
                         </View>
                         <View style={{
                             ...style.hidden,
@@ -99,12 +104,14 @@ const CreateButton = () => {
                             <View style={style.hiddenLabelWrapper}>
                                 <Text style={style.hiddenLabel}>New activity</Text>
                             </View>
-                            <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_ACTIVITY)}
-                                background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
-                                <View style={style.hiddenButton}>
-                                    <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
-                                </View>
-                            </TouchableNativeFeedback>
+                            <View style={style.hiddenButton}>
+                                <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_ACTIVITY)}
+                                    background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
+                                    <View style={{width:64,alignItems:'center'}}>
+                                        <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
+                                    </View>
+                                </TouchableNativeFeedback>
+                            </View>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>}
