@@ -13,14 +13,13 @@ type CardProps = {
 
 const style = StyleSheet.create({
     main: {
-        // TODO: Fix elevation
         height: 160,
         width: 160,
-        elevation: 8,
         flexDirection: 'column',
         alignContent: 'flex-start',
         marginVertical: 16,
-        marginHorizontal: 16
+        backgroundColor: 'white',
+        elevation: 4
     },
     iconContainer: {
         height: 80,
@@ -51,30 +50,38 @@ const Card = ({ activity }: CardProps) => {
 
     const [icon, setIcon] = useState(null as ActivityIcon | null)
 
-    // TODO: Fix icon not showing
     // Get icon
     useEffect(() => {
         setIcon(getActivityIcon(activity.icon.name))
-    })
+    }, [])
 
     return (
+
         <View style={style.main}>
-            <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple("#fff")}>
-                <View >
-                    <View style={style.iconContainer}>
-                        <Image style={style.icon} source={icon?.file}></Image>
-                    </View>
-                    <View style={style.textContainer}>
-                        <Text style={style.title}>
-                            {activity.name}
-                        </Text>
-                        {activity.high && <Text style={style.high}>
-                            {`Current high: ${convertTimestamp(activity.high)}`}
-                        </Text>}
-                    </View>
+            <TouchableNativeFeedback onPress={() => console.log("hey")} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, false)}>
+                <View style={{
+                    height: 160,
+                    width: 160,
+                    position: "absolute",
+                    zIndex: 2
+                }}>
                 </View>
             </TouchableNativeFeedback>
-        </View>
+            <View style={{ flex: 1 }}>
+                <View style={style.iconContainer}>
+                    <Image style={style.icon} source={icon?.file}></Image>
+                </View>
+                <View style={style.textContainer}>
+                    <Text style={style.title}>
+                        {activity.name}
+                    </Text>
+                    {activity.high && <Text style={style.high}>
+                        {`Current high: ${convertTimestamp(activity.high)}`}
+                    </Text>}
+                </View>
+            </View>
+        </View >
+
     )
 }
 

@@ -102,7 +102,7 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
                         if (goBack)
                             goBack();
                         // TODO: Add roipple color to a variable if needed to be adjusted with theme
-                    }} background={TouchableNativeFeedback.Ripple("#fff", true)} style={{ borderRadius: 100 }}>
+                    }} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)} style={{ borderRadius: 100 }}>
                         <View>
                             <Image style={style.icon} source={require("../../assets/icons/light/back.png")}></Image>
                         </View>
@@ -119,7 +119,7 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
                 <View style={style.menu}>
                     <View style={{ ...style.iconWrapper, marginRight: 0 }}>
                         {/* Button wrapper */}
-                        <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple("#fff", true)}
+                        <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}
                             onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
                             <View>
                                 <Image style={style.icon} source={require("../../assets/icons/light/3dots.png")}></Image>

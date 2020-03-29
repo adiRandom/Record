@@ -23,3 +23,13 @@
 - `Activity` and `ActivityIcon` models
 - Service to save a new Activity
 - Card component
+
+## v0.0.4
+
+**Changed**
+
+- `convertTimestamp` now gets a float
+
+**Added**
+
+- `Activity` route

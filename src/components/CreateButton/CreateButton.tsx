@@ -70,7 +70,7 @@ const CreateButton = () => {
     else
         return <View style={style.main}>
             <TouchableNativeFeedback onPress={() => setShowHidden(!showHidden)}
-                background={TouchableNativeFeedback.Ripple("#fff", true)}>
+                background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
                 <View style={style.toggleButton}>
                     <Image style={style.toggleButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
                 </View>
@@ -86,7 +86,7 @@ const CreateButton = () => {
                                 <Text style={style.hiddenLabel}>Register a record</Text>
                             </View>
                             <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_RECORD)}
-                                background={TouchableNativeFeedback.Ripple("#fff", true)}>
+                                background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
                                 <View style={style.hiddenButton}>
                                     <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/stopwatch.png")}></Image>
                                 </View>
@@ -100,7 +100,7 @@ const CreateButton = () => {
                                 <Text style={style.hiddenLabel}>New activity</Text>
                             </View>
                             <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_ACTIVITY)}
-                                background={TouchableNativeFeedback.Ripple("#fff", true)}>
+                                background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
                                 <View style={style.hiddenButton}>
                                     <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
                                 </View>

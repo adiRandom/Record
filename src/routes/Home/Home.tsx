@@ -17,7 +17,9 @@ const style = StyleSheet.create({
         zIndex: 0
     },
     cardList: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        zIndex:1,
+        justifyContent:'space-evenly',
     }
 })
 

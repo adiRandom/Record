@@ -1,4 +1,4 @@
-import { AsyncStorage } from "react-native";
+import AsyncStorage  from "@react-native-community/async-storage";
 
 
 export const LAST_ID_KEY = "last_id"

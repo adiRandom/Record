@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Dimensions, Image, TextInput, TouchableNativeFeedback, StyleSheet, KeyboardAvoidingView, Text, AsyncStorage } from 'react-native'
+import { View, Dimensions, Image, TextInput, TouchableNativeFeedback, StyleSheet, KeyboardAvoidingView, Text, TouchableWithoutFeedback } from 'react-native'
 import Appbar from '../../components/Appbar/Appbar'
 import { NavigationProps } from '../NavigationProps'
 import GestureRecognizer from 'react-native-swipe-gestures'
@@ -9,7 +9,7 @@ import { Colors } from '../../assets/style/Theme'
 import ActivityIcon from '../../models/ActivityIcon'
 import Activity from '../../models/Activity'
 import getNewActivityId from '../../utils/GetNewActivityId'
-import {addActivity} from '../../services/Activity'
+import { addActivity } from '../../services/Activity'
 import { Redirect } from 'react-router-native'
 import Routes from '../Routes'
 
@@ -24,14 +24,17 @@ const style = StyleSheet.create({
     iconSelecter: {
         width,
         height: 196,
-        alignItems: 'center',
-        justifyContent: 'center',
         backgroundColor: Colors.primary,
         marginTop: 32
     },
     icon: {
         height: 164,
         width: 164,
+    },
+    iconWrapper: {
+        width,
+        height: 196,
+        alignItems: 'center'
     },
     saveButton: {
         width: 96,
@@ -75,6 +78,7 @@ const style = StyleSheet.create({
 
 const CreateActivity = ({ goBack }: NavigationProps) => {
 
+
     const [icons, setIcons] = useState([] as Array<ActivityIcon>)
     const [currentIconIndex, setCurrentIconIndex] = useState(0)
     const [name, setName] = useState("")
@@ -85,6 +89,7 @@ const CreateActivity = ({ goBack }: NavigationProps) => {
         const temp = [] as Array<ActivityIcon>
         for (let icon of Activities)
             temp.push(getActivityIcon(icon));
+
 
         setIcons(temp)
     }, [])
@@ -122,27 +127,27 @@ const CreateActivity = ({ goBack }: NavigationProps) => {
 
         <View style={style.main}>
             <Appbar title="New activity" canGoBack goBack={goBack} />
-            <View style={{ flex: 1 }}>
-                <View style={style.iconSelecter}>
-                    <GestureRecognizer onSwipeLeft={nextIcon} onSwipeRight={lastIcon}>
-                        <Image style={style.icon} source={icons[currentIconIndex]?.file}></Image>
-                    </GestureRecognizer>
-                </View>
-                <View style={style.hintWrapper}>
-                    <Text style={style.hint}>Swipe to cycle through the icons</Text>
-                </View>
-                {/* TODO: Fix */}
-                <KeyboardAvoidingView>
-                    <View style={style.textInputWrapper}>
-                        <TextInput style={style.textInput} placeholder={"Give this activity a name"} value={name} onChangeText={setName}></TextInput>
-                    </View>
-                </KeyboardAvoidingView>
-                <TouchableNativeFeedback onPress={createActivity} background={TouchableNativeFeedback.Ripple("#fff", true)}>
-                    <View style={style.saveButton}>
-                        <Image style={style.saveIcon} source={require("../../assets/icons/light/save.png")}></Image>
-                    </View>
-                </TouchableNativeFeedback>
+            <View style={style.iconSelecter}>
+                <GestureRecognizer onSwipeLeft={nextIcon} onSwipeRight={lastIcon}>
+                    <TouchableWithoutFeedback>
+                        <View style={style.iconWrapper}>
+                            <Image style={style.icon} source={icons[currentIconIndex]?.file}></Image>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </GestureRecognizer>
             </View>
+            <View style={style.hintWrapper}>
+                <Text style={style.hint}>Swipe to cycle through the icons</Text>
+            </View>
+            {/* TODO: Fix */}
+            <View style={style.textInputWrapper}>
+                <TextInput style={style.textInput} placeholder={"Give this activity a name"} value={name} onChangeText={setName}></TextInput>
+            </View>
+            <TouchableNativeFeedback onPress={createActivity} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
+                <View style={style.saveButton}>
+                    <Image style={style.saveIcon} source={require("../../assets/icons/light/save.png")}></Image>
+                </View>
+            </TouchableNativeFeedback>
         </View>
 
     )
