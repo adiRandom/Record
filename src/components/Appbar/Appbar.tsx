@@ -96,6 +96,7 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
         <View style={style.main}>
             <View style={style.appbar}>
                 {/* Back button wrapper */}
+                {/* TODO: Fix the back button */}
                 {canGoBack && <View style={style.iconWrapper}>
                     {/* TODO:Fix ripple round */}
                     <TouchableNativeFeedback onPress={() => {

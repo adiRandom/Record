@@ -4,6 +4,7 @@ import Home from "./routes/Home/Home";
 import { View } from "react-native";
 import CreateActivity from "./routes/CreateActivity/CreateActivity";
 import Activity from "./routes/Activity/Activity";
+import History from "./routes/History/History";
 // TODO: Add components
 
 
@@ -19,7 +20,7 @@ const App = () => {
 					<Route exact strict path="/activity/:id" component={Activity} />
 					<Route exact strict path="/add/activity" component={CreateActivity} />
 					<Route exact strict path="/add/record"></Route>
-					<Route exact strict path="/activity/:id/history" />
+					<Route exact strict path="/activity/:id/history" component={History} />
 				</Switch>
 			</NativeRouter>
 		</View>

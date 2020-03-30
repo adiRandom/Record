@@ -112,8 +112,8 @@ const CreateActivity = ({ goBack }: NavigationProps) => {
         const newActivity: Activity = {
             id: await getNewActivityId(),
             name,
-            high: null,
-            icon: icons[currentIconIndex]
+            icon: icons[currentIconIndex],
+            records:[]
         }
 
         addActivity(newActivity);

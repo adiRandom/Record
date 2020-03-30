@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import ActivityModel from '../../models/Activity'
+import ActivityModel, { Record } from '../../models/Activity'
 import { View, Image, Text, TouchableNativeFeedback, StyleSheet, Dimensions, TouchableOpacity, Modal } from 'react-native'
 import Appbar from '../../components/Appbar/Appbar'
 import getActivityIcon from '../../utils/GetActivityIcon'
 import { convertTimestamp } from '../../utils/ConvertTimestamp'
 import { Colors } from '../../assets/style/Theme'
-import { getActivity } from '../../services/Activity'
-import { useParams } from 'react-router-native'
+import { getActivity, addRecordToActivity } from '../../services/Activity'
+import { useParams, Redirect } from 'react-router-native'
+import Routes from '../Routes'
 
 const { height, width } = Dimensions.get('screen')
 
@@ -30,12 +31,12 @@ const style = StyleSheet.create({
         width: 164
     },
     header: {
-        fontFamily: "Roboto-light",
+        fontFamily: "Roboto-Ligh",
         fontSize: 32,
         marginBottom: 16
     },
     time: {
-        fontFamily: "Roboto-light",
+        fontFamily: "Roboto-Ligh",
         fontSize: 60,
         color: Colors.secondary
     },
@@ -71,7 +72,7 @@ const style = StyleSheet.create({
     },
     historyButtonLabel: {
         color: 'white',
-        fontFamily: 'Roboto-bold',
+        fontFamily: 'Roboto-Bold',
         fontSize: 24
     },
     buttonContainer: {
@@ -92,12 +93,13 @@ const style = StyleSheet.create({
     },
     modalTitle: {
         fontSize: 40,
-        fontFamily: 'Roboto-bold',
+        fontFamily: 'Roboto-Bold',
         color: 'white'
     },
     modalTitleContainerRecord: {
         flexDirection: 'column',
-        alignContent: 'center'
+        alignItems: 'center',
+        justifyContent:'center'
     },
     modalTime: {
         fontFamily: 'Roboto',
@@ -107,7 +109,7 @@ const style = StyleSheet.create({
     },
     modalOk: {
         fontSize: 36,
-        fontFamily: 'Roboto-bold',
+        fontFamily: 'Roboto-Bold',
         color: Colors.secondary,
     }
 })
@@ -126,6 +128,7 @@ const Activity = ({ goBack }: ActivityPropos) => {
     const [showModal, setShowModal] = useState(false)
     const [isPaused, setIsPaused] = useState(false)
     const { id } = useParams()
+    const [redirect, setRedirect] = useState("")
 
     // Effect handling stopwatch
     useEffect(() => {
@@ -134,6 +137,9 @@ const Activity = ({ goBack }: ActivityPropos) => {
             setTimeElapsed(false);
         }
     }, [timeElapsed])
+    
+
+    console.log(convertTimestamp(time) === '-')
 
     //Get activity by ID
     useEffect(() => {
@@ -163,15 +169,31 @@ const Activity = ({ goBack }: ActivityPropos) => {
 
     function stop() {
         // TOOD: Check if it is record
+
+        const record: Record = {
+            time,
+            date: Date.now()
+        }
+
+        let isNewRecord = false
+
+        if (activity && activity.records[0] && activity.records[0].time > record.time)
+            isNewRecord = true;
+
+        setIsRecord(isNewRecord)
         clearInterval(interval);
         setShowModal(true)
         rSetInterval(null)
+        addRecordToActivity(activity!!, record);
     }
 
     function dismissModal() {
         setShowModal(false);
         setTime(0)
     }
+
+    if (redirect !== "")
+        return <Redirect to={redirect} />
 
     return (
         <View style={style.main}>
@@ -188,9 +210,9 @@ const Activity = ({ goBack }: ActivityPropos) => {
                         }
                         {!isRecord && <Text style={style.modalTitle}>YOU JUST GOT:</Text>}
                         <Text style={style.modalTime}>{convertTimestamp(time)}</Text>
-                        <View style={{marginTop:64}}>
+                        <View style={{ marginTop: 64 }}>
                             <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(Colors.secondary)} onPress={dismissModal}>
-                                <View style={{width:96,alignItems:'center'}}>
+                                <View style={{ width: 96, alignItems: 'center' }}>
                                     <Text style={style.modalOk}>OK</Text>
                                 </View>
                             </TouchableNativeFeedback>
@@ -210,7 +232,7 @@ const Activity = ({ goBack }: ActivityPropos) => {
                     Go set a new record
             </Text>
                 <Text style={style.time}>
-                    {convertTimestamp(time)}
+                    {convertTimestamp(time) === "-" ? "0:00" : convertTimestamp(time)}
                 </Text>
                 {interval === null &&
                     <View style={{ ...style.controlButton, ...style.startButton }}>
@@ -240,7 +262,8 @@ const Activity = ({ goBack }: ActivityPropos) => {
                 }
                 {/* TODO: Change text color on press */}
                 <View style={style.historyButton}>
-                    <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
+                    <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}
+                        onPress={() => setRedirect(Routes.ACTIVITY_HISTORY(id!!))}>
                         <View style={{ width: 216, alignItems: 'center' }}>
                             <Text style={style.historyButtonLabel}>SEE HISTORY</Text>
                         </View>

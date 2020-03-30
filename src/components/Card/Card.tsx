@@ -44,7 +44,7 @@ const style = StyleSheet.create({
     },
     high: {
         fontFamily: "Roboto-Light",
-        fontSize: 8
+        fontSize: 12
     }
 })
 
@@ -85,8 +85,8 @@ const Card = ({ activity }: CardProps) => {
                     <Text style={style.title}>
                         {activity.name}
                     </Text>
-                    {activity.high && <Text style={style.high}>
-                        {`Current high: ${convertTimestamp(activity.high)}`}
+                    {activity.records[0] && <Text style={style.high}>
+                        {`Current high: ${convertTimestamp(activity.records[0].time)}`}
                     </Text>}
                 </View>
             </View>
