@@ -86,6 +86,7 @@ const style = StyleSheet.create({
         backgroundColor: 'black',
         alignItems: 'center',
         justifyContent: 'center',
+        zIndex: 2
     },
     modalContent: {
         flexDirection: 'column',
@@ -99,7 +100,7 @@ const style = StyleSheet.create({
     modalTitleContainerRecord: {
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent:'center'
+        justifyContent: 'center'
     },
     modalTime: {
         fontFamily: 'Roboto',
@@ -111,6 +112,13 @@ const style = StyleSheet.create({
         fontSize: 36,
         fontFamily: 'Roboto-Bold',
         color: Colors.secondary,
+    },
+    modalBakground: {
+        height,
+        width,
+        backgroundColor: 'black',
+        zIndex: -1,
+        position:'absolute'
     }
 })
 
@@ -137,7 +145,7 @@ const Activity = ({ goBack }: ActivityPropos) => {
             setTimeElapsed(false);
         }
     }, [timeElapsed])
-    
+
 
     console.log(convertTimestamp(time) === '-')
 
@@ -200,7 +208,11 @@ const Activity = ({ goBack }: ActivityPropos) => {
             {/* TODO: If it is a new record, make the time shake */}
             <Modal animated animationType={"fade"} visible={showModal}>
                 {/* TODO: Add background graphics, ligt and dark */}
+
                 <View style={style.modalMain}>
+                    <View style={style.modalBakground}>
+                        <Image style={style.modalBakground} source={require("../../assets/images/Background.png")}></Image>
+                    </View>
                     <View style={style.modalContent}>
                         {isRecord &&
                             <View style={style.modalTitleContainerRecord}>
