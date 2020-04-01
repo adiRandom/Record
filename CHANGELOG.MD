@@ -45,3 +45,7 @@
 
 - History
 - Fixed `convertTimestamp`
+
+## v.0.0.6
+
+    - Removed the ability to enter records manually (only from UI)

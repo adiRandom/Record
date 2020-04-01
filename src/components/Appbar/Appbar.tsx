@@ -1,7 +1,8 @@
 import React, { useState } from "react"
-import { View, Text, Image, StyleSheet, TouchableNativeFeedback, } from "react-native"
+import { View, Text, Image, StyleSheet, TouchableNativeFeedback, Dimensions, } from "react-native"
 import { Colors } from "../../assets/style/Theme"
 
+const {width} = Dimensions.get('screen')
 
 type AppbarProps = {
     title: string|undefined,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Dimensions, Image, TextInput, TouchableNativeFeedback, StyleSheet, KeyboardAvoidingView, Text, TouchableWithoutFeedback } from 'react-native'
+import { View, Dimensions, Image, TextInput, TouchableNativeFeedback, StyleSheet, KeyboardAvoidingView, Text, TouchableWithoutFeedback, ScrollView } from 'react-native'
 import Appbar from '../../components/Appbar/Appbar'
 import { NavigationProps } from '../NavigationProps'
 import GestureRecognizer from 'react-native-swipe-gestures'
@@ -12,6 +12,7 @@ import getNewActivityId from '../../utils/GetNewActivityId'
 import { addActivity } from '../../services/Activity'
 import { Redirect } from 'react-router-native'
 import Routes from '../Routes'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const { height, width } = Dimensions.get('screen')
 
@@ -113,7 +114,7 @@ const CreateActivity = ({ goBack }: NavigationProps) => {
             id: await getNewActivityId(),
             name,
             icon: icons[currentIconIndex],
-            records:[]
+            records: []
         }
 
         addActivity(newActivity);
@@ -125,29 +126,34 @@ const CreateActivity = ({ goBack }: NavigationProps) => {
     return (
         // TODO: Add touchable opacity to dismiss keyboard
 
+
         <View style={style.main}>
             <Appbar title="New activity" canGoBack goBack={goBack} />
-            <View style={style.iconSelecter}>
-                <GestureRecognizer onSwipeLeft={nextIcon} onSwipeRight={lastIcon}>
-                    <TouchableWithoutFeedback>
-                        <View style={style.iconWrapper}>
-                            <Image style={style.icon} source={icons[currentIconIndex]?.file}></Image>
+            {/* TODO: Fix appbar offscreen */}
+            <KeyboardAwareScrollView enableOnAndroid={true}  automaticallyAdjustContentInsets={false}   >
+                <View style={{ height: height - 64 }}>
+                    <View style={style.iconSelecter}>
+                        <GestureRecognizer onSwipeLeft={nextIcon} onSwipeRight={lastIcon}>
+                            <TouchableWithoutFeedback>
+                                <View style={style.iconWrapper}>
+                                    <Image style={style.icon} source={icons[currentIconIndex]?.file}></Image>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </GestureRecognizer>
+                    </View>
+                    <View style={style.hintWrapper}>
+                        <Text style={style.hint}>Swipe to cycle through the icons</Text>
+                    </View>
+                    <View style={style.textInputWrapper}>
+                        <TextInput style={style.textInput} placeholder={"Give this activity a name"} value={name} onChangeText={setName}></TextInput>
+                    </View>
+                    <TouchableNativeFeedback onPress={createActivity} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
+                        <View style={style.saveButton}>
+                            <Image style={style.saveIcon} source={require("../../assets/icons/light/save.png")}></Image>
                         </View>
-                    </TouchableWithoutFeedback>
-                </GestureRecognizer>
-            </View>
-            <View style={style.hintWrapper}>
-                <Text style={style.hint}>Swipe to cycle through the icons</Text>
-            </View>
-            {/* TODO: Fix */}
-            <View style={style.textInputWrapper}>
-                <TextInput style={style.textInput} placeholder={"Give this activity a name"} value={name} onChangeText={setName}></TextInput>
-            </View>
-            <TouchableNativeFeedback onPress={createActivity} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
-                <View style={style.saveButton}>
-                    <Image style={style.saveIcon} source={require("../../assets/icons/light/save.png")}></Image>
+                    </TouchableNativeFeedback>
                 </View>
-            </TouchableNativeFeedback>
+            </KeyboardAwareScrollView>
         </View>
 
     )

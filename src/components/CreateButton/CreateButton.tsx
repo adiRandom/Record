@@ -70,9 +70,9 @@ const CreateButton = () => {
     else
         return <View style={style.main}>
             <View style={style.toggleButton}>
-                <TouchableNativeFeedback onPress={() => setShowHidden(!showHidden)}
+                <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_ACTIVITY)}
                     background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
-                    <View style={{width:64,alignItems:'center'}}>
+                    <View style={{ width: 64, alignItems: 'center' }}>
                         <Image style={style.toggleButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
                     </View>
                 </TouchableNativeFeedback>
@@ -91,7 +91,7 @@ const CreateButton = () => {
                             <View style={style.hiddenButton}>
                                 <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_RECORD)}
                                     background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
-                                    <View style={{width:64,alignItems:'center'}}>
+                                    <View style={{ width: 64, alignItems: 'center' }}>
                                         <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/stopwatch.png")}></Image>
                                     </View>
                                 </TouchableNativeFeedback>
@@ -107,7 +107,7 @@ const CreateButton = () => {
                             <View style={style.hiddenButton}>
                                 <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_ACTIVITY)}
                                     background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
-                                    <View style={{width:64,alignItems:'center'}}>
+                                    <View style={{ width: 64, alignItems: 'center' }}>
                                         <Image style={style.hiddenButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
                                     </View>
                                 </TouchableNativeFeedback>
