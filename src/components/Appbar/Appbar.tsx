@@ -1,11 +1,12 @@
 import React, { useState } from "react"
 import { View, Text, Image, StyleSheet, TouchableNativeFeedback, Dimensions, } from "react-native"
-import { Colors } from "../../assets/style/Theme"
+import { Colors, themeObservable } from "../../assets/style/Theme"
+import useTheme from "../../utils/hooks/UseTheme"
 
-const {width} = Dimensions.get('screen')
+const { width } = Dimensions.get('screen')
 
 type AppbarProps = {
-    title: string|undefined,
+    title: string | undefined,
     canGoBack?: boolean,
     goBack?: () => void,
 }
@@ -73,14 +74,21 @@ type ThemeDropdownProps = {
 }
 
 export const ThemeDropdown = ({ isVisible }: ThemeDropdownProps) => {
+
+    const theme = useTheme();
+
+    function changeTheme() {
+        themeObservable.next(theme === 'dark' ? "light" : "dark");
+    }
+
     if (isVisible)
         // TODO: Add dismiss toucable fullscreen
         return (<View style={style.menuList}>
-            <TouchableNativeFeedback>
+            <TouchableNativeFeedback onPress={changeTheme} background={TouchableNativeFeedback.Ripple(Colors.rippleLight)}>
                 {/* TODO: Change text based on teme */}
                 <View style={style.menuItem}>
                     <Text style={style.menuItemLabel}>
-                        Change to dark theme
+                        {` Change to ${theme === 'dark' ? "light" : "dark"} theme`}
                     </Text>
                 </View>
             </TouchableNativeFeedback>

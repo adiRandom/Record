@@ -8,10 +8,11 @@ import { View, Text, FlatList, StyleSheet, Dimensions } from 'react-native'
 import { convertTimestamp } from '../../utils/ConvertTimestamp'
 import getDate from '../../utils/GetDate'
 import { Colors } from '../../assets/style/Theme'
+import useTheme from '../../utils/hooks/UseTheme'
 
 const { width, height } = Dimensions.get('screen')
 
-const style = StyleSheet.create({
+const _style = StyleSheet.create({
     main: {
         flexDirection: 'column',
         width,
@@ -43,7 +44,18 @@ const style = StyleSheet.create({
     listItem: {
         fontSize: 18,
         fontFamily: 'Roboto-Light',
-        marginBottom:16
+        marginBottom: 16
+    }
+})
+
+const darkStyle = StyleSheet.create({
+    main: {
+        ..._style.main,
+        backgroundColor: Colors.backgroundDark
+    },
+    listItem:{
+        ..._style.listItem,
+        color:"white"
     }
 })
 
@@ -51,6 +63,17 @@ const History = ({ goBack }: NavigationProps) => {
 
     const [activity, setAtivity] = useState(null as Activity | null)
     const { id } = useParams()
+    const theme = useTheme()
+    const [style, setStyle] = useState(_style);
+
+    useEffect(() => {
+        //Update styling
+        let newStyle = _style;
+        if (theme === "dark")
+            newStyle = { ..._style, ...darkStyle as any };
+
+        setStyle(newStyle);
+    }, [theme])
 
     useEffect(() => {
         //Fetch activity
@@ -67,9 +90,9 @@ const History = ({ goBack }: NavigationProps) => {
                 </View>
                 <View style={style.listView}>
                     <FlatList data={activity?.records} renderItem={({ item, index }) => {
-                            return (
-                                <Text style={style.listItem}>{`${index+1}.  ${convertTimestamp(item.time)} - ${getDate(item.date)}`}</Text>
-                            )
+                        return (
+                            <Text style={style.listItem}>{`${index + 1}.  ${convertTimestamp(item.time)} - ${getDate(item.date)}`}</Text>
+                        )
                     }
                     }></FlatList>
                 </View>

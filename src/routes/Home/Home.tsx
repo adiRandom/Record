@@ -8,25 +8,45 @@ import Activity from '../../models/Activity'
 import { getAllActivities } from '../../services/Activity'
 import Card from '../../components/Card/Card'
 import AsyncStorage from '@react-native-community/async-storage'
+import { Colors } from '../../assets/style/Theme'
+import useTheme from '../../utils/hooks/UseTheme'
+
 
 const { height } = Dimensions.get('window')
 
-const style = StyleSheet.create({
+const _style = StyleSheet.create({
     main: {
         height,
         zIndex: 0
     },
     cardList: {
         flexDirection: 'row',
-        zIndex:1,
-        justifyContent:'space-evenly',
+        zIndex: 1,
+        justifyContent: 'space-evenly',
     }
 })
 
+const darkStyle = StyleSheet.create({
+    main: {
+        ..._style.main,
+        backgroundColor: Colors.backgroundDark
+    }
+})
 
 const Home = ({ goBack }: NavigationProps) => {
 
     const [activities, setActivities] = useState([] as Activity[])
+    const theme = useTheme()
+    const [style, setStyle] = useState(_style);
+
+    useEffect(() => {
+        //Update styling
+        let newStyle = _style;
+        if (theme === "dark")
+            newStyle = { ..._style, ...darkStyle as any };
+
+        setStyle(newStyle);
+    }, [theme])
 
     // Fetch activities
     useEffect(() => {

@@ -8,10 +8,11 @@ import { Colors } from '../../assets/style/Theme'
 import { getActivity, addRecordToActivity } from '../../services/Activity'
 import { useParams, Redirect } from 'react-router-native'
 import Routes from '../Routes'
+import useTheme from '../../utils/hooks/UseTheme'
 
 const { height, width } = Dimensions.get('screen')
 
-const style = StyleSheet.create({
+const _style = StyleSheet.create({
     main: {
         height,
         width,
@@ -118,7 +119,18 @@ const style = StyleSheet.create({
         width,
         backgroundColor: 'black',
         zIndex: -1,
-        position:'absolute'
+        position: 'absolute'
+    }
+})
+
+const darkStyle = StyleSheet.create({
+    main: {
+        ..._style.main,
+        backgroundColor: Colors.backgroundDark
+    },
+    header: {
+        ..._style.header,
+        color: "white"
     }
 })
 
@@ -137,6 +149,17 @@ const Activity = ({ goBack }: ActivityPropos) => {
     const [isPaused, setIsPaused] = useState(false)
     const { id } = useParams()
     const [redirect, setRedirect] = useState("")
+    const theme = useTheme()
+    const [style, setStyle] = useState(_style);
+
+    useEffect(() => {
+        //Update styling
+        let newStyle = _style;
+        if (theme === "dark")
+            newStyle = { ..._style, ...darkStyle as any };
+
+        setStyle(newStyle);
+    }, [theme])
 
     // Effect handling stopwatch
     useEffect(() => {
@@ -147,7 +170,6 @@ const Activity = ({ goBack }: ActivityPropos) => {
     }, [timeElapsed])
 
 
-    console.log(convertTimestamp(time) === '-')
 
     //Get activity by ID
     useEffect(() => {

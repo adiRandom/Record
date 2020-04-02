@@ -13,10 +13,11 @@ import { addActivity } from '../../services/Activity'
 import { Redirect } from 'react-router-native'
 import Routes from '../Routes'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import useTheme from '../../utils/hooks/UseTheme'
 
 const { height, width } = Dimensions.get('screen')
 
-const style = StyleSheet.create({
+const _style = StyleSheet.create({
     main: {
         height,
         width,
@@ -76,6 +77,16 @@ const style = StyleSheet.create({
     }
 })
 
+const darkStyle = StyleSheet.create({
+    main:{
+        ..._style.main,
+        backgroundColor:Colors.backgroundDark
+    },
+    textInput:{
+        ..._style.textInput,
+        color:"white"
+    }
+})
 
 const CreateActivity = ({ goBack }: NavigationProps) => {
 
@@ -84,6 +95,17 @@ const CreateActivity = ({ goBack }: NavigationProps) => {
     const [currentIconIndex, setCurrentIconIndex] = useState(0)
     const [name, setName] = useState("")
     const [saved, setSaved] = useState(false)
+    const theme = useTheme()
+    const [style, setStyle] = useState(_style);
+
+    useEffect(() => {
+        //Update styling
+        let newStyle = _style;
+        if (theme === "dark")
+            newStyle = { ..._style, ...darkStyle as any };
+
+        setStyle(newStyle);
+    }, [theme])
 
     // Load all icons
     useEffect(() => {

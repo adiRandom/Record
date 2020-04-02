@@ -1,6 +1,6 @@
 {
   "name": "Record",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -11,13 +11,15 @@
     "start-emulator": "emulator -avd Pixel_2_API_29"
   },
   "dependencies": {
+    "@adi_random/observable-js": "^1.0.0",
     "@react-native-community/async-storage": "^1.8.1",
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-datepicker": "^1.7.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-swipe-gestures": "^1.0.5",
-    "react-router-native": "^5.1.2"
+    "react-router-native": "^5.1.2",
+    "rxjs": "^6.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

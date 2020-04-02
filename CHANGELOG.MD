@@ -48,4 +48,12 @@
 
 ## v.0.0.6
 
+**Removed**
+
     - Removed the ability to enter records manually (only from UI)
+
+## v0.0.7
+    
+**Addedd**
+
+    -Dark theme

@@ -7,13 +7,14 @@ import getActivityIcon from '../../utils/GetActivityIcon'
 import ActivityIcon from '../../models/ActivityIcon'
 import Routes from '../../routes/Routes'
 import { Redirect } from 'react-router-native'
+import useTheme from '../../utils/hooks/UseTheme'
 
 type CardProps = {
     activity: Activity,
     key?: string
 }
 
-const style = StyleSheet.create({
+const _style = StyleSheet.create({
     main: {
         height: 160,
         width: 160,
@@ -48,10 +49,36 @@ const style = StyleSheet.create({
     }
 })
 
+const darkStyle = StyleSheet.create({
+    main:{
+        ..._style.main,
+        backgroundColor:Colors.cardDark,
+    },
+    title:{
+        ..._style.title,
+        color:"white"
+    },
+    high:{
+        ..._style.high,
+        color:"white"
+    }
+})
+
 const Card = ({ activity }: CardProps) => {
 
     const [icon, setIcon] = useState(null as ActivityIcon | null)
     const [redirect, setRedirect] = useState("")
+    const theme = useTheme()
+    const [style, setStyle] = useState(_style);
+
+    useEffect(() => {
+        //Update styling
+        let newStyle = _style;
+        if (theme === "dark")
+            newStyle = { ..._style, ...darkStyle as any };
+
+        setStyle(newStyle);
+    }, [theme])
 
     // Get icon
     useEffect(() => {
