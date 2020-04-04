@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Dimensions, ScrollView } from 'react-native'
+import { View, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native'
 import Appbar from '../../components/Appbar/Appbar'
 import { BackButton } from 'react-router-native'
 import { NavigationProps } from '../NavigationProps'
@@ -19,9 +19,7 @@ const _style = StyleSheet.create({
         zIndex: 0,
     },
     cardList: {
-        flexDirection: 'row',
         zIndex: 1,
-        justifyContent: 'space-evenly',
     }
 })
 
@@ -58,10 +56,13 @@ const Home = ({ history }: NavigationProps) => {
         <View style={style.main}>
             {/* Link android back button to router */}
             <Appbar title="Record list" goBack={history.goBack}></Appbar>
-            <View style={{marginTop:64,height:height-64}}>
-                <ScrollView contentContainerStyle={style.cardList}>
+            <View style={{ marginTop: 64, height: height - 64 ,paddingBottom:32}}>
+                {/* <ScrollView contentContainerStyle={style.cardList}>
                     {activities.map((val: Activity, index: number) => <Card key={index.toString()} activity={val}></Card>)}
-                </ScrollView>
+                </ScrollView> */}
+                <FlatList data={activities} renderItem={({ item }) => (<Card activity={item}></Card>)}
+                    keyExtractor={val => val.id} numColumns={2}
+                    contentContainerStyle={style.cardList} style={{ paddingHorizontal: 24 }}></FlatList>
                 <CreateButton></CreateButton></View>
         </View>)
 }

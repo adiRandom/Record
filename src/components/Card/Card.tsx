@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Activity from '../../models/Activity'
-import { View, Image, Text, TouchableNativeFeedback, StyleSheet } from 'react-native'
+import { View, Image, Text, TouchableNativeFeedback, StyleSheet, Dimensions } from 'react-native'
 import { convertTimestamp } from '../../utils/ConvertTimestamp'
 import { Colors } from '../../assets/style/Theme'
 import getActivityIcon from '../../utils/GetActivityIcon'
@@ -14,6 +14,8 @@ type CardProps = {
     key?: string
 }
 
+const {width} = Dimensions.get('screen')
+
 const _style = StyleSheet.create({
     main: {
         height: 160,
@@ -22,7 +24,8 @@ const _style = StyleSheet.create({
         alignContent: 'flex-start',
         marginVertical: 16,
         backgroundColor: 'white',
-        elevation: 4
+        elevation: 4,
+        marginRight:width-320-48,
     },
     iconContainer: {
         height: 80,
@@ -41,7 +44,8 @@ const _style = StyleSheet.create({
     },
     title: {
         fontFamily: "Roboto-Bold",
-        fontSize: 16
+        fontSize: 16,
+        overflow:"hidden",
     },
     high: {
         fontFamily: "Roboto-Light",
@@ -109,7 +113,7 @@ const Card = ({ activity }: CardProps) => {
                     <Image style={style.icon} source={icon?.file}></Image>
                 </View>
                 <View style={style.textContainer}>
-                    <Text style={style.title}>
+                    <Text numberOfLines={1} style={style.title}>
                         {activity.name}
                     </Text>
                     {activity.records[0] && <Text style={style.high}>

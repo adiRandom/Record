@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Dimensions, Image, TextInput, TouchableNativeFeedback, StyleSheet, KeyboardAvoidingView, Text, TouchableWithoutFeedback, ScrollView } from 'react-native'
+import { View, Dimensions, Image, TextInput, TouchableNativeFeedback, StyleSheet, KeyboardAvoidingView, Text, TouchableWithoutFeedback, ScrollView, Keyboard } from 'react-native'
 import Appbar from '../../components/Appbar/Appbar'
 import { NavigationProps } from '../NavigationProps'
 import GestureRecognizer from 'react-native-swipe-gestures'
@@ -40,8 +40,8 @@ const _style = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         alignSelf: 'center',
-        position: 'absolute',
-        bottom: 96 + 32
+        position: 'relative',
+        top: 64
     },
     saveIcon: {
         height: 54,
@@ -90,6 +90,7 @@ const CreateActivity = ({ history }: NavigationProps) => {
     const [saved, setSaved] = useState(false)
     const theme = useTheme()
     const [style, setStyle] = useState(_style);
+    const [isKeyboardUp, setIsKeyboardUp] = useState(false)
 
     const saveLight = require("../../assets/icons/light/save.png");
     const saveDark = require("../../assets/icons/dark/save.png")
@@ -112,6 +113,18 @@ const CreateActivity = ({ history }: NavigationProps) => {
 
         setIcons(temp)
     }, [])
+
+    //Subscribe to keyboard show event
+
+    useEffect(() => {
+        const showListener = Keyboard.addListener("keyboardDidShow", () => setIsKeyboardUp(true))
+        const hideListener = Keyboard.addListener("keyboardDidHide", () => setIsKeyboardUp(false))
+
+        return () => {
+            showListener.remove();
+            hideListener.remove();
+        }
+    })
 
     function nextIcon() {
         let newIndex = currentIconIndex + 1;
@@ -139,15 +152,19 @@ const CreateActivity = ({ history }: NavigationProps) => {
         setSaved(true)
     }
 
+    function dismissKeyboard() {
+        if (isKeyboardUp)
+            Keyboard.dismiss();
+    }
+
+
     if (saved)
         return <Redirect push to={Routes.HOME}></Redirect>
     return (
-        // TODO: Add touchable opacity to dismiss keyboard
 
-        <View style={{height}}>
-            <ScrollView style={{marginTop:64}}>
-                <KeyboardAvoidingView behavior="height" style={{zIndex:0}}>
-                    {/* TODO: Fix appbar offscreen */}
+        <View style={{ flex: 1 }}>
+            <TouchableWithoutFeedback onPress={dismissKeyboard}>
+                <KeyboardAvoidingView behavior="position" style={{ flex: 1, marginTop: 64 }}>
                     <View style={style.iconSelecter}>
                         <GestureRecognizer onSwipeLeft={nextIcon} onSwipeRight={lastIcon}>
                             <TouchableWithoutFeedback>
@@ -163,17 +180,29 @@ const CreateActivity = ({ history }: NavigationProps) => {
                     <View style={style.textInputWrapper}>
                         <TextInput style={style.textInput} placeholder={"Give this activity a name"} value={name} onChangeText={setName}></TextInput>
                     </View>
+                    <TouchableNativeFeedback onPress={createActivity} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
+                        <View style={style.saveButton}>
+                            <Image style={style.saveIcon} source={theme === "dark" ? saveLight : saveDark}></Image>
+                        </View>
+                    </TouchableNativeFeedback>
                 </KeyboardAvoidingView>
-            </ScrollView>
-            <TouchableNativeFeedback onPress={createActivity} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
-                <View style={style.saveButton}>
-                    <Image style={style.saveIcon} source={theme === "dark" ? saveLight : saveDark}></Image>
-                </View>
-            </TouchableNativeFeedback>
+            </TouchableWithoutFeedback>
+
             <Appbar title="New activity" canGoBack goBack={history.goBack} />
         </View >
 
     )
+
+    // return (
+    //     <View style={{flex:1}}> 
+    //         {/* <Appbar title="Helloo" /> */}
+    //         <View style={{position:"absolute",top:0,left:0}}><Text>Hello</Text></View>
+    //         <KeyboardAvoidingView behavior="position" style={{marginTop:64,flex:1}}>
+    //             <View style={{height:200,backgroundColor:"blue",marginBottom:64}}></View>
+    //             <TextInput style={{borderColor:"red",borderWidth:10}} />
+    //         </KeyboardAvoidingView>
+    //     </View>
+    // )
 }
 
 

@@ -18,9 +18,9 @@ const style = StyleSheet.create({
         height: 64,
         zIndex: 10,
         width,
-        position:"absolute",
-        top:0,
-        left:0
+        position: "absolute",
+        top: 0,
+        left: 0
     },
     appbar: {
         backgroundColor: Colors.primary,
@@ -49,7 +49,8 @@ const style = StyleSheet.create({
         fontFamily: "Roboto",
         fontSize: 32,
         lineHeight: 37,
-        fontStyle: "normal"
+        fontStyle: "normal",
+        // width:width-128
     }
 })
 
@@ -78,6 +79,13 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
         setDropdownBackground(background)
     }, [theme])
 
+    function breakText(val?: string) {
+        if (val)
+            if (val.length > 12)
+                return val.substring(0, 12) + "..."
+        return val
+    }
+
 
 
     return (
@@ -98,9 +106,9 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
                 </View>}
                 {/* Title wrapper */}
                 {/* Correct position if no back button */}
-                <View style={{ marginLeft: !canGoBack ? 64 : 0 }}>
+                <View style={{ marginLeft: !canGoBack ? 64 : 0, width: width - 128 }}>
                     <Text style={{ ...style.title, color: theme !== "dark" ? "black" : "white" }}>
-                        {title}
+                        {breakText(title)}
                     </Text>
                 </View>
                 {/* Options menu */}

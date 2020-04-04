@@ -71,3 +71,12 @@
 
 - Theme changes get saved
 - Themed icons
+
+
+## V0.1.1
+
+**Fixed**
+
+- Keyboard now shows properly
+- Homescreen layout
+- Text overflow
