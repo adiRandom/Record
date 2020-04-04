@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-native'
 import { View, TouchableNativeFeedback, Image, Text, StyleSheet, Dimensions, TouchableWithoutFeedback } from 'react-native'
 import { Colors } from '../../assets/style/Theme'
 import Routes from "../../routes/Routes"
+import useTheme from '../../utils/hooks/UseTheme'
 
 const { height, width } = Dimensions.get('screen')
 
@@ -65,15 +66,20 @@ const CreateButton = () => {
     const [redirect, setRedirect] = useState("")
     const [showHidden, setShowHidden] = useState(false)
 
+    const createLight = require("../../assets/icons/light/create.png")
+    const createDark = require("../../assets/icons/dark/create.png")
+
+    const theme = useTheme();
+
     if (redirect !== "")
-        return (<Redirect to={redirect} />)
+        return (<Redirect push to={redirect} />)
     else
         return <View style={style.main}>
             <View style={style.toggleButton}>
                 <TouchableNativeFeedback onPress={() => setRedirect(Routes.ADD_ACTIVITY)}
                     background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
                     <View style={{ width: 64, alignItems: 'center' }}>
-                        <Image style={style.toggleButtonIcon} source={require("../../assets/icons/light/create.png")}></Image>
+                        <Image style={style.toggleButtonIcon} source={theme === "dark" ? createLight:createDark}></Image>
                     </View>
                 </TouchableNativeFeedback>
             </View>

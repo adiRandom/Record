@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StyleSheet, Dimensions } from 'react-native'
+import { View, StyleSheet, Dimensions, ScrollView } from 'react-native'
 import Appbar from '../../components/Appbar/Appbar'
 import { BackButton } from 'react-router-native'
 import { NavigationProps } from '../NavigationProps'
@@ -16,8 +16,7 @@ const { height } = Dimensions.get('window')
 
 const _style = StyleSheet.create({
     main: {
-        height,
-        zIndex: 0
+        zIndex: 0,
     },
     cardList: {
         flexDirection: 'row',
@@ -33,7 +32,7 @@ const darkStyle = StyleSheet.create({
     }
 })
 
-const Home = ({ goBack }: NavigationProps) => {
+const Home = ({ history }: NavigationProps) => {
 
     const [activities, setActivities] = useState([] as Activity[])
     const theme = useTheme()
@@ -54,15 +53,16 @@ const Home = ({ goBack }: NavigationProps) => {
     }, [])
 
 
+
     return (
         <View style={style.main}>
             {/* Link android back button to router */}
-            <BackButton></BackButton>
-            <Appbar title="Record list" goBack={goBack}></Appbar>
-            <View style={style.cardList}>
-                {activities.map((val: Activity, index: number) => <Card key={index.toString()} activity={val}></Card>)}
-            </View>
-            <CreateButton></CreateButton>
+            <Appbar title="Record list" goBack={history.goBack}></Appbar>
+            <View style={{marginTop:64,height:height-64}}>
+                <ScrollView contentContainerStyle={style.cardList}>
+                    {activities.map((val: Activity, index: number) => <Card key={index.toString()} activity={val}></Card>)}
+                </ScrollView>
+                <CreateButton></CreateButton></View>
         </View>)
 }
 

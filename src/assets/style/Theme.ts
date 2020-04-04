@@ -12,5 +12,4 @@ export const Colors = {
     cardDark: "#214552"
 }
 
-// TODO: Store the theme
 export const themeObservable = new BehaviorSubject<"light" | "dark">("light")

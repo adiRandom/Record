@@ -12,17 +12,11 @@ import getNewActivityId from '../../utils/GetNewActivityId'
 import { addActivity } from '../../services/Activity'
 import { Redirect } from 'react-router-native'
 import Routes from '../Routes'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import useTheme from '../../utils/hooks/UseTheme'
 
 const { height, width } = Dimensions.get('screen')
 
 const _style = StyleSheet.create({
-    main: {
-        height,
-        width,
-        flexDirection: 'column',
-    },
     iconSelecter: {
         width,
         height: 196,
@@ -78,17 +72,16 @@ const _style = StyleSheet.create({
 })
 
 const darkStyle = StyleSheet.create({
-    main:{
-        ..._style.main,
-        backgroundColor:Colors.backgroundDark
+    main: {
+        backgroundColor: Colors.backgroundDark
     },
-    textInput:{
+    textInput: {
         ..._style.textInput,
-        color:"white"
+        color: "white"
     }
 })
 
-const CreateActivity = ({ goBack }: NavigationProps) => {
+const CreateActivity = ({ history }: NavigationProps) => {
 
 
     const [icons, setIcons] = useState([] as Array<ActivityIcon>)
@@ -97,6 +90,9 @@ const CreateActivity = ({ goBack }: NavigationProps) => {
     const [saved, setSaved] = useState(false)
     const theme = useTheme()
     const [style, setStyle] = useState(_style);
+
+    const saveLight = require("../../assets/icons/light/save.png");
+    const saveDark = require("../../assets/icons/dark/save.png")
 
     useEffect(() => {
         //Update styling
@@ -144,16 +140,14 @@ const CreateActivity = ({ goBack }: NavigationProps) => {
     }
 
     if (saved)
-        return <Redirect to={Routes.HOME}></Redirect>
+        return <Redirect push to={Routes.HOME}></Redirect>
     return (
         // TODO: Add touchable opacity to dismiss keyboard
 
-
-        <View style={style.main}>
-            <Appbar title="New activity" canGoBack goBack={goBack} />
-            {/* TODO: Fix appbar offscreen */}
-            <KeyboardAwareScrollView enableOnAndroid={true}  automaticallyAdjustContentInsets={false}   >
-                <View style={{ height: height - 64 }}>
+        <View style={{height}}>
+            <ScrollView style={{marginTop:64}}>
+                <KeyboardAvoidingView behavior="height" style={{zIndex:0}}>
+                    {/* TODO: Fix appbar offscreen */}
                     <View style={style.iconSelecter}>
                         <GestureRecognizer onSwipeLeft={nextIcon} onSwipeRight={lastIcon}>
                             <TouchableWithoutFeedback>
@@ -169,14 +163,15 @@ const CreateActivity = ({ goBack }: NavigationProps) => {
                     <View style={style.textInputWrapper}>
                         <TextInput style={style.textInput} placeholder={"Give this activity a name"} value={name} onChangeText={setName}></TextInput>
                     </View>
-                    <TouchableNativeFeedback onPress={createActivity} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
-                        <View style={style.saveButton}>
-                            <Image style={style.saveIcon} source={require("../../assets/icons/light/save.png")}></Image>
-                        </View>
-                    </TouchableNativeFeedback>
+                </KeyboardAvoidingView>
+            </ScrollView>
+            <TouchableNativeFeedback onPress={createActivity} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
+                <View style={style.saveButton}>
+                    <Image style={style.saveIcon} source={theme === "dark" ? saveLight : saveDark}></Image>
                 </View>
-            </KeyboardAwareScrollView>
-        </View>
+            </TouchableNativeFeedback>
+            <Appbar title="New activity" canGoBack goBack={history.goBack} />
+        </View >
 
     )
 }

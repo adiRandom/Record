@@ -1,9 +1,10 @@
-import React, { useState } from "react"
-import { View, Text, Image, StyleSheet, TouchableNativeFeedback, Dimensions, } from "react-native"
+import React, { useState, useEffect } from "react"
+import { View, Text, Image, StyleSheet, TouchableNativeFeedback, Dimensions, TouchableWithoutFeedbackBase, TouchableWithoutFeedback, } from "react-native"
 import { Colors, themeObservable } from "../../assets/style/Theme"
 import useTheme from "../../utils/hooks/UseTheme"
+import { Menu, DefaultTheme } from "react-native-paper"
 
-const { width } = Dimensions.get('screen')
+const { width, height } = Dimensions.get('screen')
 
 type AppbarProps = {
     title: string | undefined,
@@ -15,7 +16,11 @@ type AppbarProps = {
 const style = StyleSheet.create({
     main: {
         height: 64,
-        zIndex: 10
+        zIndex: 10,
+        width,
+        position:"absolute",
+        top:0,
+        left:0
     },
     appbar: {
         backgroundColor: Colors.primary,
@@ -23,6 +28,7 @@ const style = StyleSheet.create({
         flexDirection: "row",
         alignItems: 'center',
         justifyContent: 'flex-start',
+        width
     },
     iconWrapper: {
         height: 32,
@@ -36,32 +42,10 @@ const style = StyleSheet.create({
     },
     menu: {
         position: 'absolute',
-        right: 8
-    },
-    menuList: {
-        position: 'absolute',
-        right: 8,
-        top: 8,
-        elevation: 4,
-        backgroundColor: 'white',
-        height: 48,
-        zIndex: 2,
-    },
-    menuItem: {
-        height: 48,
-        padding: 16,
-        justifyContent: "center"
-    },
-    menuItemLabel: {
-        fontSize: 18,
-        fontFamily: 'Roboto',
-        fontWeight: '300',
-        fontStyle: 'normal'
+        right: 16
     },
     title: {
         color: "white",
-        fontWeight: "500",
-        // TODO: Fix fonts
         fontFamily: "Roboto",
         fontSize: 32,
         lineHeight: 37,
@@ -69,76 +53,72 @@ const style = StyleSheet.create({
     }
 })
 
-type ThemeDropdownProps = {
-    isVisible: boolean,
-}
-
-export const ThemeDropdown = ({ isVisible }: ThemeDropdownProps) => {
-
-    const theme = useTheme();
-
-    function changeTheme() {
-        themeObservable.next(theme === 'dark' ? "light" : "dark");
-    }
-
-    if (isVisible)
-        // TODO: Add dismiss toucable fullscreen
-        return (<View style={style.menuList}>
-            <TouchableNativeFeedback onPress={changeTheme} background={TouchableNativeFeedback.Ripple(Colors.rippleLight)}>
-                {/* TODO: Change text based on teme */}
-                <View style={style.menuItem}>
-                    <Text style={style.menuItemLabel}>
-                        {` Change to ${theme === 'dark' ? "light" : "dark"} theme`}
-                    </Text>
-                </View>
-            </TouchableNativeFeedback>
-        </View>)
-    return null;
-}
 
 
 const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
 
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+    const theme = useTheme();
+    const [dropdownBackground, setDropdownBackground] = useState("white")
+
+    const light3Dots = require("../../assets/icons/light/3dots.png");
+    const dark3Dots = require("../../assets/icons/dark/3dots.png");
+    const lightBack = require("../../assets/icons/light/back.png")
+    const darkBack = require("../../assets/icons/dark/back.png")
+
+    function changeTheme() {
+        themeObservable.next(theme === 'dark' ? "light" : "dark");
+        setIsDropdownVisible(false)
+    }
+
+    useEffect(() => {
+        let background = "white"
+        if (theme === "dark")
+            background = Colors.backgroundDark
+        setDropdownBackground(background)
+    }, [theme])
+
+
 
     return (
         <View style={style.main}>
             <View style={style.appbar}>
                 {/* Back button wrapper */}
-                {/* TODO: Fix the back button */}
                 {canGoBack && <View style={style.iconWrapper}>
-                    {/* TODO:Fix ripple round */}
                     <TouchableNativeFeedback onPress={() => {
-                        if (goBack)
+                        if (goBack) {
+                            console.log(goBack)
                             goBack();
-                        // TODO: Add roipple color to a variable if needed to be adjusted with theme
+                        }
                     }} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)} style={{ borderRadius: 100 }}>
                         <View>
-                            <Image style={style.icon} source={require("../../assets/icons/light/back.png")}></Image>
+                            <Image style={style.icon} source={theme === "dark" ? lightBack : darkBack}></Image>
                         </View>
                     </TouchableNativeFeedback>
                 </View>}
                 {/* Title wrapper */}
                 {/* Correct position if no back button */}
                 <View style={{ marginLeft: !canGoBack ? 64 : 0 }}>
-                    <Text style={style.title}>
+                    <Text style={{ ...style.title, color: theme !== "dark" ? "black" : "white" }}>
                         {title}
                     </Text>
                 </View>
                 {/* Options menu */}
                 <View style={style.menu}>
-                    <View style={{ ...style.iconWrapper, marginRight: 0 }}>
-                        {/* Button wrapper */}
-                        <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}
-                            onPress={() => setIsDropdownVisible(!isDropdownVisible)}>
-                            <View>
-                                <Image style={style.icon} source={require("../../assets/icons/light/3dots.png")}></Image>
-                            </View>
-                        </TouchableNativeFeedback>
-                    </View>
+                    <Menu visible={isDropdownVisible}
+                        anchor={
+                            <TouchableNativeFeedback
+                                background={TouchableNativeFeedback.Ripple(Colors.rippleLight)} onPress={_ => setIsDropdownVisible(true)}>
+                                <Image style={style.icon} source={theme === "dark" ? light3Dots : dark3Dots}></Image>
+                            </TouchableNativeFeedback>
+                        }
+                        onDismiss={() => setIsDropdownVisible(false)}
+                    >
+                        <Menu.Item onPress={changeTheme}
+                            title={` Change to ${theme === 'dark' ? "light" : "dark"} theme`} />
+                    </Menu>
                 </View>
             </View>
-            <ThemeDropdown isVisible={isDropdownVisible} />
         </View >
     )
 }

@@ -59,7 +59,7 @@ const darkStyle = StyleSheet.create({
     }
 })
 
-const History = ({ goBack }: NavigationProps) => {
+const History = ({ history }: NavigationProps) => {
 
     const [activity, setAtivity] = useState(null as Activity | null)
     const { id } = useParams()
@@ -82,8 +82,8 @@ const History = ({ goBack }: NavigationProps) => {
 
     return (
         <View style={style.main}>
-            <Appbar canGoBack goBack={goBack} title={activity?.name} />
-            <View>
+            <Appbar canGoBack goBack={history.goBack} title={activity?.name} />
+            <View style={{marginTop:64}}>
                 <View style={style.top}>
                     <Text style={style.title}>History</Text>
                     <Text style={style.high}>{`Current high: ${convertTimestamp(activity?.records[0]?.time)}`}</Text>

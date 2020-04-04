@@ -1,3 +1,5 @@
 export type NavigationProps={
-    goBack:()=>{}
+    history:{
+        goBack:()=>{}
+    }
 }

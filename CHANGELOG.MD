@@ -57,3 +57,17 @@
 **Addedd**
 
     -Dark theme
+
+## v0.1.0
+
+**Fixed**
+
+- Fonts
+- Theme menu
+- Navigation back buttons
+- If you record more timers in a row, now all get saved
+
+**Added**
+
+- Theme changes get saved
+- Themed icons

@@ -90,7 +90,7 @@ const Card = ({ activity }: CardProps) => {
     }
 
     if (redirect !== "")
-        return <Redirect to={redirect} />
+        return <Redirect push to={redirect} />
 
     return (
 

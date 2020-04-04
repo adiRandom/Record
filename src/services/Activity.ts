@@ -35,4 +35,5 @@ export async function addRecordToActivity(activity: Activity, record: Record) {
         records: sortedRecords
     }
     await AsyncStorage.setItem(`activity-${activity.id}`, JSON.stringify(updatedActivity));
+    return updatedActivity;
 }
