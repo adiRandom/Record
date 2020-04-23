@@ -1,20 +1,32 @@
-import React, { useEffect, useState } from 'react'
-import { View, Dimensions, Image, TextInput, TouchableNativeFeedback, StyleSheet, KeyboardAvoidingView, Text, TouchableWithoutFeedback, ScrollView, Keyboard } from 'react-native'
+import React, {useEffect, useState} from 'react'
+import {
+    View,
+    Dimensions,
+    Image,
+    TextInput,
+    TouchableNativeFeedback,
+    StyleSheet,
+    KeyboardAvoidingView,
+    Text,
+    TouchableWithoutFeedback,
+    ScrollView,
+    Keyboard
+} from 'react-native'
 import Appbar from '../../components/Appbar/Appbar'
-import { NavigationProps } from '../NavigationProps'
+import {NavigationProps} from '../NavigationProps'
 import GestureRecognizer from 'react-native-swipe-gestures'
 import Activities from '../../assets/icons/activity/Activities'
 import getActivityIcon from '../../utils/GetActivityIcon'
-import { Colors } from '../../assets/style/Theme'
+import {Colors} from '../../assets/style/Theme'
 import ActivityIcon from '../../models/ActivityIcon'
 import Activity from '../../models/Activity'
 import getNewActivityId from '../../utils/GetNewActivityId'
-import { addActivity } from '../../services/Activity'
-import { Redirect } from 'react-router-native'
+import {addActivity} from '../../services/Activity'
+import {Redirect} from 'react-router-native'
 import Routes from '../Routes'
 import useTheme from '../../utils/hooks/UseTheme'
 
-const { height, width } = Dimensions.get('screen')
+const {height, width} = Dimensions.get('screen')
 
 const _style = StyleSheet.create({
     iconSelecter: {
@@ -81,7 +93,7 @@ const darkStyle = StyleSheet.create({
     }
 })
 
-const CreateActivity = ({ history }: NavigationProps) => {
+const CreateActivity = ({history}: NavigationProps) => {
 
 
     const [icons, setIcons] = useState([] as Array<ActivityIcon>)
@@ -99,7 +111,7 @@ const CreateActivity = ({ history }: NavigationProps) => {
         //Update styling
         let newStyle = _style;
         if (theme === "dark")
-            newStyle = { ..._style, ...darkStyle as any };
+            newStyle = {..._style, ...darkStyle as any};
 
         setStyle(newStyle);
     }, [theme])
@@ -145,7 +157,8 @@ const CreateActivity = ({ history }: NavigationProps) => {
             id: await getNewActivityId(),
             name,
             icon: icons[currentIconIndex],
-            records: []
+            records: [],
+            isRecordHighest: true
         }
 
         addActivity(newActivity);
@@ -162,9 +175,9 @@ const CreateActivity = ({ history }: NavigationProps) => {
         return <Redirect push to={Routes.HOME}></Redirect>
     return (
 
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
             <TouchableWithoutFeedback onPress={dismissKeyboard}>
-                <KeyboardAvoidingView behavior="position" style={{ flex: 1, marginTop: 64 }}>
+                <KeyboardAvoidingView behavior="position" style={{flex: 1, marginTop: 64}}>
                     <View style={style.iconSelecter}>
                         <GestureRecognizer onSwipeLeft={nextIcon} onSwipeRight={lastIcon}>
                             <TouchableWithoutFeedback>
@@ -178,9 +191,11 @@ const CreateActivity = ({ history }: NavigationProps) => {
                         <Text style={style.hint}>Swipe to cycle through the icons</Text>
                     </View>
                     <View style={style.textInputWrapper}>
-                        <TextInput style={style.textInput} placeholder={"Give this activity a name"} value={name} onChangeText={setName}></TextInput>
+                        <TextInput style={style.textInput} placeholder={"Give this activity a name"} value={name}
+                                   onChangeText={setName}></TextInput>
                     </View>
-                    <TouchableNativeFeedback onPress={createActivity} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
+                    <TouchableNativeFeedback onPress={createActivity}
+                                             background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}>
                         <View style={style.saveButton}>
                             <Image style={style.saveIcon} source={theme === "dark" ? saveLight : saveDark}></Image>
                         </View>
@@ -188,8 +203,8 @@ const CreateActivity = ({ history }: NavigationProps) => {
                 </KeyboardAvoidingView>
             </TouchableWithoutFeedback>
 
-            <Appbar title="New activity" canGoBack goBack={history.goBack} />
-        </View >
+            <Appbar title="New activity" canGoBack goBack={history.goBack}/>
+        </View>
 
     )
 

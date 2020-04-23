@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import ActivityModel, { Record } from '../../models/Activity'
+import ActivityModel, {Record, sortRecordsByTimeHighest, sortRecordsByTimeLowest} from '../../models/Activity'
 import { View, Image, Text, TouchableNativeFeedback, StyleSheet, Dimensions, TouchableOpacity, Modal, Animated } from 'react-native'
 import Appbar from '../../components/Appbar/Appbar'
 import getActivityIcon from '../../utils/GetActivityIcon'
 import { convertTimestamp } from '../../utils/ConvertTimestamp'
 import { Colors } from '../../assets/style/Theme'
-import { getActivity, addRecordToActivity } from '../../services/Activity'
+import {getActivity, addRecordToActivity, updateActivity} from '../../services/Activity'
 import { useParams, Redirect } from 'react-router-native'
 import Routes from '../Routes'
 import useTheme from '../../utils/hooks/UseTheme'
@@ -154,6 +154,10 @@ const Activity = ({ history }: NavigationProps) => {
     const theme = useTheme()
     const [style, setStyle] = useState(_style);
 
+    // Use this state to prevent a data loose. There would be a moment while you can update the activity while some changes are being written to the storage,
+    // resulting in those changes to be lost
+    const [canToggleRecord,setCanToggleRecord] = useState(true)
+
     const startLight = require("../../assets/icons/light/start.png")
     const startDark = require("../../assets/icons/dark/start.png")
 
@@ -212,6 +216,8 @@ const Activity = ({ history }: NavigationProps) => {
     function stop() {
         // TOOD: Check if it is record
 
+        setCanToggleRecord(false)
+
         const record: Record = {
             time,
             date: Date.now()
@@ -227,12 +233,25 @@ const Activity = ({ history }: NavigationProps) => {
             clearInterval(interval);
             setShowModal(true)
             rSetInterval(null)
+            setCanToggleRecord(true)
         });
     }
 
     function dismissModal() {
         setShowModal(false);
         setTime(0)
+    }
+
+    async function toggleRecord(val: boolean) {
+        if(canToggleRecord) {
+            const update: ActivityModel = {
+                ...activity!!,
+                isRecordHighest: val,
+                records: activity!!.records.sort(val ? sortRecordsByTimeHighest : sortRecordsByTimeLowest)
+            }
+            await updateActivity(update);
+            setActivity(update)
+        }
     }
 
 
@@ -267,7 +286,8 @@ const Activity = ({ history }: NavigationProps) => {
                     </View>
                 </View>
             </Modal>
-            <Appbar title={activity?.name.toUpperCase()} goBack={history.goBack} canGoBack={true}></Appbar>
+            <Appbar canGoBack goBack={history.goBack} title={activity?.name.toUpperCase()} isRecordHigh={activity?.isRecordHighest}
+                    showToggleHigh={true} updateActivity={toggleRecord}/>
             <View style={{ marginTop: 64 }}>
                 <View style={style.iconContainer}>
                     <Image style={style.icon} source={getActivityIcon(activity?.icon.name).file}></Image>

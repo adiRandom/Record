@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { NavigationProps } from '../NavigationProps'
+import React, {useState, useEffect} from 'react'
+import {NavigationProps} from '../NavigationProps'
 import Appbar from '../../components/Appbar/Appbar'
-import Activity from '../../models/Activity'
-import { getActivity } from '../../services/Activity'
-import { useParams } from 'react-router-native'
-import { View, Text, FlatList, StyleSheet, Dimensions } from 'react-native'
-import { convertTimestamp } from '../../utils/ConvertTimestamp'
+import Activity, {sortRecordsByTimeHighest, sortRecordsByTimeLowest} from '../../models/Activity'
+import {getActivity, updateActivity} from '../../services/Activity'
+import {useParams} from 'react-router-native'
+import {View, Text, FlatList, StyleSheet, Dimensions} from 'react-native'
+import {convertTimestamp} from '../../utils/ConvertTimestamp'
 import getDate from '../../utils/GetDate'
-import { Colors } from '../../assets/style/Theme'
+import {Colors} from '../../assets/style/Theme'
 import useTheme from '../../utils/hooks/UseTheme'
+import {act} from "react-test-renderer";
 
-const { width, height } = Dimensions.get('screen')
+const {width, height} = Dimensions.get('screen')
 
 const _style = StyleSheet.create({
     main: {
@@ -53,16 +54,16 @@ const darkStyle = StyleSheet.create({
         ..._style.main,
         backgroundColor: Colors.backgroundDark
     },
-    listItem:{
+    listItem: {
         ..._style.listItem,
-        color:"white"
+        color: "white"
     }
 })
 
-const History = ({ history }: NavigationProps) => {
+const History = ({history}: NavigationProps) => {
 
-    const [activity, setAtivity] = useState(null as Activity | null)
-    const { id } = useParams()
+    const [activity, setActivity] = useState(null as Activity | null)
+    const {id} = useParams()
     const theme = useTheme()
     const [style, setStyle] = useState(_style);
 
@@ -70,15 +71,17 @@ const History = ({ history }: NavigationProps) => {
         //Update styling
         let newStyle = _style;
         if (theme === "dark")
-            newStyle = { ..._style, ...darkStyle as any };
+            newStyle = {..._style, ...darkStyle as any};
 
         setStyle(newStyle);
     }, [theme])
 
     useEffect(() => {
         //Fetch activity
-        getActivity(id!!).then(res => setAtivity(res))
+        getActivity(id!!).then(res => setActivity(res))
     }, [])
+
+
 
     return (
         <View style={style.main}>
@@ -89,14 +92,15 @@ const History = ({ history }: NavigationProps) => {
                     <Text style={style.high}>{`Current high: ${convertTimestamp(activity?.records[0]?.time)}`}</Text>
                 </View>
                 <View style={style.listView}>
-                    <FlatList data={activity?.records} renderItem={({ item, index }) => {
+                    <FlatList data={activity?.records} renderItem={({item, index}) => {
                         return (
-                            <Text style={style.listItem}>{`${index + 1}.  ${convertTimestamp(item.time)} - ${getDate(item.date)}`}</Text>
+                            <Text
+                                style={style.listItem}>{`${index + 1}.  ${convertTimestamp(item.time)} - ${getDate(item.date)}`}</Text>
                         )
                     }
-                    }></FlatList>
+                    }/>
                 </View>
-            </View >
+            </View>
         </View>
     )
 }

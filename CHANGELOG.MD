@@ -80,3 +80,9 @@
 - Keyboard now shows properly
 - Homescreen layout
 - Text overflow
+
+## V0.1.2
+
+**Changed**
+
+- Ability to change what is considered high score

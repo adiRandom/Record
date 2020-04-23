@@ -1,15 +1,28 @@
-import React, { useState, useEffect } from "react"
-import { View, Text, Image, StyleSheet, TouchableNativeFeedback, Dimensions, TouchableWithoutFeedbackBase, TouchableWithoutFeedback, } from "react-native"
-import { Colors, themeObservable } from "../../assets/style/Theme"
+import React, {useState, useEffect} from "react"
+import {
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    TouchableNativeFeedback,
+    Dimensions,
+    TouchableWithoutFeedbackBase,
+    TouchableWithoutFeedback,
+} from "react-native"
+import {Colors, themeObservable} from "../../assets/style/Theme"
 import useTheme from "../../utils/hooks/UseTheme"
-import { Menu, DefaultTheme } from "react-native-paper"
+import {Menu, DefaultTheme} from "react-native-paper"
+import Activity from "../../models/Activity";
 
-const { width, height } = Dimensions.get('screen')
+const {width, height} = Dimensions.get('screen')
 
 type AppbarProps = {
     title: string | undefined,
     canGoBack?: boolean,
     goBack?: () => void,
+    showToggleHigh?: boolean,
+    isRecordHigh?: boolean,
+    updateActivity?: (isRecordHigh: boolean) => void
 }
 
 
@@ -55,8 +68,7 @@ const style = StyleSheet.create({
 })
 
 
-
-const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
+const Appbar = ({title, canGoBack, goBack, showToggleHigh, updateActivity, isRecordHigh}: AppbarProps) => {
 
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
     const theme = useTheme();
@@ -87,7 +99,6 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
     }
 
 
-
     return (
         <View style={style.main}>
             <View style={style.appbar}>
@@ -98,7 +109,8 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
                             console.log(goBack)
                             goBack();
                         }
-                    }} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)} style={{ borderRadius: 100 }}>
+                    }} background={TouchableNativeFeedback.Ripple(Colors.rippleLight, true)}
+                                             style={{borderRadius: 100}}>
                         <View>
                             <Image style={style.icon} source={theme === "dark" ? lightBack : darkBack}></Image>
                         </View>
@@ -106,31 +118,35 @@ const Appbar = ({ title, canGoBack, goBack }: AppbarProps) => {
                 </View>}
                 {/* Title wrapper */}
                 {/* Correct position if no back button */}
-                <View style={{ marginLeft: !canGoBack ? 64 : 0, width: width - 128 }}>
-                    <Text style={{ ...style.title, color: theme !== "dark" ? "black" : "white" }}>
+                <View style={{marginLeft: !canGoBack ? 64 : 0, width: width - 128}}>
+                    <Text style={{...style.title, color: theme !== "dark" ? "black" : "white"}}>
                         {breakText(title)}
                     </Text>
                 </View>
                 {/* Options menu */}
                 <View style={style.menu}>
                     <Menu visible={isDropdownVisible}
-                        anchor={
-                            <TouchableNativeFeedback
-                                background={TouchableNativeFeedback.Ripple(Colors.rippleLight)} onPress={_ => setIsDropdownVisible(true)}>
-                                <Image style={style.icon} source={theme === "dark" ? light3Dots : dark3Dots}></Image>
-                            </TouchableNativeFeedback>
-                        }
-                        onDismiss={() => setIsDropdownVisible(false)}
+                          anchor={
+                              <TouchableNativeFeedback
+                                  background={TouchableNativeFeedback.Ripple(Colors.rippleLight)}
+                                  onPress={_ => setIsDropdownVisible(true)}>
+                                  <Image style={style.icon} source={theme === "dark" ? light3Dots : dark3Dots}></Image>
+                              </TouchableNativeFeedback>
+                          }
+                          onDismiss={() => setIsDropdownVisible(false)}
                     >
                         <Menu.Item onPress={changeTheme}
-                            title={` Change to ${theme === 'dark' ? "light" : "dark"} theme`} />
+                                   title={` Change to ${theme === 'dark' ? "light" : "dark"} theme`}/>
+                        {showToggleHigh && <Menu.Item onPress={() => {
+                            if (updateActivity)
+                                updateActivity(!isRecordHigh)
+                        }} title={`Toggle record to ${isRecordHigh ? "lowest" : "highest"}`}/>}
                     </Menu>
                 </View>
             </View>
-        </View >
+        </View>
     )
 }
-
 
 
 export default Appbar;

@@ -1,6 +1,6 @@
-import Activity, { Record, sortRecordsByTime } from "../models/Activity";
+import Activity, {Record, sortRecordsByTimeHighest} from "../models/Activity";
 import AsyncStorage from "@react-native-community/async-storage";
-import { LAST_ID_KEY } from "../utils/GetNewActivityId";
+import {LAST_ID_KEY} from "../utils/GetNewActivityId";
 
 
 export async function addActivity(activity: Activity) {
@@ -11,8 +11,7 @@ export async function getAllActivities() {
     const lastId = await AsyncStorage.getItem(LAST_ID_KEY);
     if (lastId === null) {
         return []
-    }
-    else {
+    } else {
         const max = Number.parseInt(lastId);
         const activityKeys: string[] = [];
         for (let i = 0; i <= max; i++) {
@@ -29,11 +28,15 @@ export async function getActivity(id: string) {
 
 export async function addRecordToActivity(activity: Activity, record: Record) {
     const records = [...activity.records, record];
-    const sortedRecords = records.sort(sortRecordsByTime)
+    const sortedRecords = records.sort(activity.isRecordHighest ? sortRecordsByTimeHighest : sortRecordsByTimeHighest)
     const updatedActivity = {
         ...activity,
         records: sortedRecords
     }
     await AsyncStorage.setItem(`activity-${activity.id}`, JSON.stringify(updatedActivity));
     return updatedActivity;
+}
+
+export async function updateActivity(activity: Activity) {
+    await AsyncStorage.setItem(`activity-${activity.id}`, JSON.stringify(activity));
 }
